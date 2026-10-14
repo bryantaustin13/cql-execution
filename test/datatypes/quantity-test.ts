@@ -123,6 +123,35 @@ describe('Quantity', () => {
     should.not.exist(subtract);
   });
 
+  it('modulo Quantity with the same unit', () => {
+    new Quantity(3.5, 'cm')
+      .modulo(new Quantity(3, 'cm'))
+      .equals(new Quantity(0.5, 'cm'))
+      .should.be.true();
+    new Quantity(10, 'g')
+      .modulo(new Quantity(3, 'g'))
+      .equals(new Quantity(1, 'g'))
+      .should.be.true();
+    new Quantity(-7, 'cm')
+      .modulo(new Quantity(3, 'cm'))
+      .equals(new Quantity(-1, 'cm'))
+      .should.be.true();
+  });
+
+  it('modulo Quantity should convert units when possible', () => {
+    const modulo = new Quantity(250, 'cm').modulo(new Quantity(1, 'm'));
+    modulo.equals(new Quantity(50, 'cm')).should.be.true();
+  });
+
+  it('modulo Quantity results in null when units cannot be converted', () => {
+    should.not.exist(new Quantity(8, 'cm').modulo(new Quantity(2, 'g')));
+  });
+
+  it('modulo Quantity results in null when the divisor is zero or null', () => {
+    should.not.exist(new Quantity(8, 'cm').modulo(new Quantity(0, 'cm')));
+    should.not.exist(new Quantity(8, 'cm').modulo(null));
+  });
+
   const types = [null, undefined, ''];
   for (const unit of types) {
     (unit => {

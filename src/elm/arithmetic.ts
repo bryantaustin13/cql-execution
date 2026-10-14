@@ -161,6 +161,9 @@ export class Modulo extends Expression {
 
     let modulo: number | bigint | Decimal;
     const [x, y] = args;
+    if (x.isQuantity) {
+      return x.modulo(y);
+    }
     try {
       modulo = x.isDecimal || y.isDecimal ? Decimal.from(x).modulo(y) : x % y;
     } catch {
